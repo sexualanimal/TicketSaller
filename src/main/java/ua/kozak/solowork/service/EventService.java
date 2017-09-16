@@ -24,7 +24,7 @@ public interface EventService {
 
     Set<Event> getAll();
 
-    Event remove(Event user) throws EventNotExistsException;
+    Event remove(Event event) throws EventNotExistsException;
 
     boolean checkEventUnique(Event event);
 

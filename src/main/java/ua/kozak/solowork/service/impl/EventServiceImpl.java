@@ -96,7 +96,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event remove(Event event) throws EventNotExistsException {
         Set<Event> buffEvents = getAll();
-        boolean isDeleted = buffEvents.removeIf(m -> !m.equals(event));
+        boolean isDeleted = buffEvents.removeIf(m -> m.equals(event));
         if (!isDeleted) throw new EventNotExistsException();
         storageService.write(buffEvents);
         return event;
