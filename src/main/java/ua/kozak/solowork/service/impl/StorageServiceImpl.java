@@ -8,6 +8,7 @@ import java.util.HashSet;
 public class StorageServiceImpl<O> implements StorageService<O> {
 
     private String fileName;
+    private String filePath = "src\\main\\resources\\storage\\";
     private File file;
 
     public StorageServiceImpl(String fileName) {
@@ -50,7 +51,11 @@ public class StorageServiceImpl<O> implements StorageService<O> {
 
     @Override
     public boolean create(String fileName) {
-        this.fileName = "src\\main\\resources\\storage\\" + fileName + ".nathalie";
+        File directory = new File(filePath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        this.fileName = filePath + fileName + ".nathalie";
         this.file = new File(this.fileName);
         if (!file.exists()) {
             try {
