@@ -12,7 +12,8 @@ public class Event implements Serializable {
     private double basePrice;
     private Set<Date> dates = new HashSet<>();
 
-    public Event(String name, double basePrice) {
+    public Event(long id, String name, double basePrice) {
+        this.id = id;
         this.name = name;
         this.basePrice = basePrice;
     }
@@ -60,4 +61,37 @@ public class Event implements Serializable {
     public void addDate(Date date) {
         dates.add(date);
     }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", basePrice=" + basePrice +
+                ", dates=" + dates +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return id != event.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        temp = Double.doubleToLongBits(basePrice);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (dates != null ? dates.hashCode() : 0);
+        return result;
+    }
 }
+

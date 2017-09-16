@@ -1,10 +1,10 @@
 package ua.kozak.solowork.service.impl;
 
+import org.springframework.stereotype.Service;
 import ua.kozak.solowork.domain.Date;
 import ua.kozak.solowork.domain.Event;
 import ua.kozak.solowork.domain.exception.EventAlreadyExistsException;
 import ua.kozak.solowork.domain.exception.EventNotExistsException;
-import org.springframework.stereotype.Service;
 import ua.kozak.solowork.service.EventService;
 import ua.kozak.solowork.service.StorageService;
 
@@ -93,25 +93,25 @@ public class EventServiceImpl implements EventService {
         return storageService.read();
     }
 
-    private Event buffEvent;
-
     @Override
     public Event remove(Event event) throws EventNotExistsException {
         Set<Event> buffEvents = getAll();
-        buffEvents.forEach(e -> {
-            if (e.getName().equals(event.getName()) && e.getId() == event.getId()) {
-                buffEvent = e;
-            }
-        });
-        buffEvents.remove(buffEvent);
+        boolean isDeleted = buffEvents.removeIf(m -> !m.equals(event));
+        if (!isDeleted) throw new EventNotExistsException();
         storageService.write(buffEvents);
-        return buffEvent;
+        return event;
     }
 
-    private boolean checkEventUnique(Event event) {
+    @Override
+    public boolean checkEventUnique(Event event) {
         return getAll().stream()
-                .filter(e -> e.getId() == event.getId() && e.getName().equals(event.getName()))
+                .filter(e -> e.equals(event))
                 .collect(Collectors.toSet())
                 .isEmpty();
+    }
+
+    @Override
+    public long getNextEmptyId() {
+        return getAll().stream().mapToLong(Event::getId).max().orElse(-1) + 1;
     }
 }

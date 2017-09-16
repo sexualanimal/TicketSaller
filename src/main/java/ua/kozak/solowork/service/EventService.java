@@ -25,4 +25,8 @@ public interface EventService {
     Set<Event> getAll();
 
     Event remove(Event user) throws EventNotExistsException;
+
+    boolean checkEventUnique(Event event);
+
+    long getNextEmptyId();
 }
