@@ -20,4 +20,8 @@ public interface UserService {
     Set<User> getAll();
 
     User remove(User user) throws UserNotExistsException;
+
+    boolean checkUserUnique(User user);
+
+    long getNextEmptyId();
 }

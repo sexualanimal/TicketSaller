@@ -1,9 +1,9 @@
 package ua.kozak.solowork.service.impl;
 
+import org.springframework.stereotype.Service;
 import ua.kozak.solowork.domain.User;
 import ua.kozak.solowork.domain.exception.UserAlreadyExistsException;
 import ua.kozak.solowork.domain.exception.UserNotExistsException;
-import org.springframework.stereotype.Service;
 import ua.kozak.solowork.service.StorageService;
 import ua.kozak.solowork.service.UserService;
 
@@ -76,20 +76,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User remove(User user) throws UserNotExistsException {
-        User buffUser = getAll().stream()
-                .filter(u -> u.getEmail().equals(user.getEmail()) && u.getId() == user.getId())
-                .findFirst()
-                .orElseThrow(UserNotExistsException::new);
         Set<User> buffUsers = getAll();
-        buffUsers.remove(buffUser);
+        boolean isDeleted = buffUsers.removeIf(m -> m.equals(user));
+        if (!isDeleted) throw new UserNotExistsException();
         storageService.write(buffUsers);
-        return buffUser;
+        return user;
     }
 
-    private boolean checkUserUnique(User user) {
+    @Override
+    public boolean checkUserUnique(User user) {
         return getAll().stream()
-                .filter(u -> u.getId() == user.getId() && u.getEmail().equals(user.getEmail()))
+                .filter(u -> u.equals(user))
                 .collect(Collectors.toSet())
                 .isEmpty();
+    }
+
+    @Override
+    public long getNextEmptyId() {
+        return getAll().stream().mapToLong(User::getId).max().orElse(-1) + 1;
     }
 }
