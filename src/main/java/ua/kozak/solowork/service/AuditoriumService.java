@@ -1,27 +1,23 @@
 package ua.kozak.solowork.service;
 
-import ua.kozak.solowork.domain.Auditorium;
-import ua.kozak.solowork.domain.exception.AuditoriumAlreadyExistsException;
-import ua.kozak.solowork.domain.exception.AuditoriumNotExistsException;
-
-import java.util.Set;
+//import ua.kozak.solowork.domain.Auditory;
 
 public interface AuditoriumService {
     String FILENAME = "auditorium_accounts_data";
 
-    Set<Auditorium> getAll();
-
-    Auditorium getByName(String name) throws AuditoriumNotExistsException;
-
-    Auditorium getById(long id) throws AuditoriumNotExistsException;
-
-    Auditorium save(Auditorium auditorium) throws AuditoriumAlreadyExistsException;
-
-    Set<Auditorium> saveAll(Set<Auditorium> auditoriums, boolean overwrite) throws AuditoriumAlreadyExistsException;
-
-    Auditorium remove(Auditorium auditorium) throws AuditoriumNotExistsException;
-
-    boolean checkAuditoriumUnique(Auditorium auditorium);
-
-    long getNextEmptyId();
+//    Set<Auditory> getAll();
+//
+//    Auditory getByAllName(String name) throws AuditoriumNotExistsException;
+//
+//    Auditory getById(long id) throws AuditoriumNotExistsException;
+//
+//    Auditory save(Auditory auditory) throws AuditoriumAlreadyExistsException;
+//
+//    Set<Auditory> saveAll(Set<Auditory> auditories, boolean overwrite) throws AuditoriumAlreadyExistsException;
+//
+//    Auditory remove(Auditory auditory) throws AuditoriumNotExistsException;
+//
+//    boolean checkAuditoriumUnique(Auditory auditory);
+//
+//    long getNextEmptyId();
 }

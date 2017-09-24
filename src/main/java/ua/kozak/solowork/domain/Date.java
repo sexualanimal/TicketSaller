@@ -5,19 +5,25 @@ import java.text.SimpleDateFormat;
 public class Date extends java.util.Date {
 
     private SimpleDateFormat dateFormat;
-    private String formatted;
-    private Auditorium auditorium;
 
     public Date(String dateFormatPattern) {
         super();
         this.dateFormat = new SimpleDateFormat(dateFormatPattern);
-        formatted = dateFormat.format(this);
     }
 
     public Date() {
         super();
         this.dateFormat = new SimpleDateFormat();
-        formatted = dateFormat.format(this);
+    }
+
+    public Date(long date, SimpleDateFormat dateFormat) {
+        super(date);
+        this.dateFormat = dateFormat;
+    }
+
+    public Date(long date) {
+        super(date);
+        this.dateFormat = new SimpleDateFormat();
     }
 
     public SimpleDateFormat getDateFormat() {
@@ -29,18 +35,6 @@ public class Date extends java.util.Date {
     }
 
     public String getFormatted() {
-        return formatted;
-    }
-
-    public void setFormatted(String formatted) {
-        this.formatted = formatted;
-    }
-
-    public Auditorium getAuditorium() {
-        return auditorium;
-    }
-
-    public void setAuditorium(Auditorium auditorium) {
-        this.auditorium = auditorium;
+        return dateFormat.format(this);
     }
 }

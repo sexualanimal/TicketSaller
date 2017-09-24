@@ -1,6 +1,8 @@
 package ua.kozak.solowork.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable {
 
@@ -8,9 +10,12 @@ public class User implements Serializable {
     private String email;
     private String firstName;
     private String lastName;
+    private List<Ticket> tickets = new ArrayList();
 
-    public User(long id, String email) {
-        this.id = id;
+    public User() {
+    }
+
+    public User(String email) {
         this.email = email;
     }
 
@@ -34,16 +39,32 @@ public class User implements Serializable {
         return firstName;
     }
 
-    public void setFirstName(String first_name) {
-        this.firstName = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String last_name) {
-        this.lastName = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+    public boolean addTicket(Ticket ticket) {
+        return tickets.add(ticket);
+    }
+
+    public boolean removeTicket(Ticket ticket) {
+        return tickets.remove(ticket);
     }
 
     @Override
@@ -53,6 +74,7 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", tickets=" + tickets +
                 '}';
     }
 
@@ -60,8 +82,11 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         User user = (User) o;
-        return id == user.id || (email != null ? email.equals(user.email) : user.email == null);
+
+        return id == user.id ||
+                (email != null ? email.equals(user.email) : user.email == null);
     }
 
     @Override
@@ -70,6 +95,7 @@ public class User implements Serializable {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (tickets != null ? tickets.hashCode() : 0);
         return result;
     }
 }

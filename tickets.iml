@@ -4,8 +4,8 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/spring/config/MainConfig.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/spring/config/ServiceConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/ua/kozak/solowork/config/DataBaseConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/ua/kozak/solowork/config/MainConfig.java</file>
         </fileset>
       </configuration>
     </facet>
@@ -28,5 +28,8 @@
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:4.3.9.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:4.3.9.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:4.3.9.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.9.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" level="project" />
   </component>
 </module>
