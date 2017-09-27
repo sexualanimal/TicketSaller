@@ -34,7 +34,7 @@ public class SeatDAOJdbcImpl implements SeatDAO {
         }, keyHolder);
 
         Optional<List<Map<String, Object>>> keyList = Optional.ofNullable(keyHolder.getKeyList());
-        keyList.map(item -> item.iterator().next().get("seat_id")).map(id -> (long) id).ifPresent(seat::setId);
+        keyList.map(item -> item.iterator().next().get("seat_id")).map(id -> new Long((Integer)id)).ifPresent(seat::setId);
         return seat;
     }
 

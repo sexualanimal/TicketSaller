@@ -94,9 +94,11 @@ public class Auditory implements Serializable {
 
         Auditory auditory = (Auditory) o;
 
-        return id == auditory.id ||
-                ((name != null ? name.equals(auditory.name) : auditory.name == null) &&
-                        (location != null ? location.equals(auditory.location) : auditory.location == null));
+        if (id != auditory.id) return false;
+        if (name != null ? !name.equals(auditory.name) : auditory.name != null) return false;
+        if (location != null ? !location.equals(auditory.location) : auditory.location != null) return false;
+        if (seats != null ? !seats.equals(auditory.seats) : auditory.seats != null) return false;
+        return events != null ? events.equals(auditory.events) : auditory.events == null;
     }
 
     @Override

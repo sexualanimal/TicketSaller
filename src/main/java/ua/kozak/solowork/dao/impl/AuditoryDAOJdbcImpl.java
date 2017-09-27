@@ -41,29 +41,50 @@ public class AuditoryDAOJdbcImpl implements AuditoryDAO {
             return preparedStatement;
         }, keyHolder);
 
-        auditory.getEvents().forEach(eventDAO::add);//todo not add events but modify
+        Optional<List<Map<String, Object>>> keyList = Optional.ofNullable(keyHolder.getKeyList());
+        keyList.map(item -> item.iterator().next().get("auditory_id")).map(id -> new Long((Integer) id)).ifPresent(id -> {
+            auditory.setId(id);
+            seatDAO.deleteAllByAuditoryId(id);
+        });
+
         auditory.getSeats().forEach(seatDAO::add);
 
-        Optional<List<Map<String, Object>>> keyList = Optional.ofNullable(keyHolder.getKeyList());
-        keyList.map(item -> item.iterator().next().get("auditory_id")).map(id -> (long) id).ifPresent(auditory::setId);
+        getById(auditory.getId()).getEvents().forEach(e -> {
+            e.setAuditoryId(0);
+            eventDAO.update(e);
+        });
+        auditory.getEvents().stream().filter(e -> e.getId() > 0).forEach(eventDAO::update);
+        auditory.getEvents().stream().filter(e -> e.getId() == 0).forEach(eventDAO::add);
+
         return auditory;
     }
 
     @Override
     public void update(Auditory auditory) {
-        String sql = "UPDATE ticket_seller.public.auditory_table SET (auditory_name, auditory_location) = (?,?) WHERE auditory_id = ?";
-        jdbcTemplate.update(sql, auditory.getName(), auditory.getLocation(), auditory.getId());
-        eventDAO.deleteAllByAuditoryId(auditory.getId());
-        auditory.getEvents().forEach(eventDAO::add);
+        getById(auditory.getId()).getEvents().forEach(e -> {
+            e.setAuditoryId(0);
+            eventDAO.update(e);
+        });
+        auditory.getEvents().stream().filter(e -> e.getId() > 0).forEach(eventDAO::update);
+        auditory.getEvents().stream().filter(e -> e.getId() == 0).forEach(eventDAO::add);
+
         seatDAO.deleteAllByAuditoryId(auditory.getId());
         auditory.getSeats().forEach(seatDAO::add);
+
+        String sql = "UPDATE ticket_seller.public.auditory_table SET (auditory_name, auditory_location) = (?,?) WHERE auditory_id = ?";
+        jdbcTemplate.update(sql, auditory.getName(), auditory.getLocation(), auditory.getId());
     }
 
     @Override
     public void delete(Auditory auditory) {
+        getById(auditory.getId()).getEvents().forEach(e -> {
+            e.setAuditoryId(0);
+            eventDAO.update(e);
+        });
+
         String sql = "DELETE FROM ticket_seller.public.auditory_table WHERE auditory_id = ?";
         jdbcTemplate.update(sql, auditory.getId());
-        eventDAO.deleteAllByAuditoryId(auditory.getId());
+
         seatDAO.deleteAllByAuditoryId(auditory.getId());
     }
 
@@ -84,6 +105,7 @@ public class AuditoryDAOJdbcImpl implements AuditoryDAO {
         String sql = "SELECT * FROM ticket_seller.public.auditory_table WHERE auditory_location = ?";
         return jdbcTemplate.query(sql, auditoryRowMapper, location).iterator().next();
     }
+
     @Override
     public Auditory getById(long id) {
         String sql = "SELECT * FROM ticket_seller.public.auditory_table WHERE auditory_id = ?";

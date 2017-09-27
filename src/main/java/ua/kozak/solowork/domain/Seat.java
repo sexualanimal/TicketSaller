@@ -65,10 +65,10 @@ public class Seat {
 
         Seat seat = (Seat) o;
 
-        return id == seat.id ||
-                (number == seat.number &&
-                        auditoryId == seat.auditoryId &&
-                        type == seat.type);
+        if (id != seat.id) return false;
+        if (number != seat.number) return false;
+        if (auditoryId != seat.auditoryId) return false;
+        return type == seat.type;
     }
 
     @Override

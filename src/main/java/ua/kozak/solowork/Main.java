@@ -2,12 +2,10 @@ package ua.kozak.solowork;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ua.kozak.solowork.domain.Auditory;
+import ua.kozak.solowork.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 public class Main {
@@ -19,11 +17,16 @@ public class Main {
 
         Application application = ctx.getBean(Application.class);
 
-        Auditory auditory = new Auditory();
-        auditory.setName("Name");
-        auditory.setLocation("Location");
+        Seat seat = new Seat();
+        seat.setNumber(228);
+        seat.setId(1);
+        seat.setType(SeatType.regural);
+        seat.setAuditoryId(1);
 
-        Auditory resultAuditory = application.getAuditoryDAO().add(auditory);
+        Ticket ticket = new Ticket();
+        ticket.setSeat(seat);
+
+        application.ticketDAO.add(ticket);
 
         System.out.println();
     }

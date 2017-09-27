@@ -85,8 +85,11 @@ public class User implements Serializable {
 
         User user = (User) o;
 
-        return id == user.id ||
-                (email != null ? email.equals(user.email) : user.email == null);
+        if (id != user.id) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+        return tickets != null ? tickets.equals(user.tickets) : user.tickets == null;
     }
 
     @Override

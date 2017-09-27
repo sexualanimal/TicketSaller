@@ -38,26 +38,42 @@ public class UserDAOJdbcImpl implements UserDAO {
             return preparedStatement;
         }, keyHolder);
 
-        user.getTickets().forEach(ticketDAO::add); //todo not add tickets but modify
-
         Optional<List<Map<String, Object>>> keyList = Optional.ofNullable(keyHolder.getKeyList());
-        keyList.map(item -> item.iterator().next().get("user_id")).map(id -> (long) id).ifPresent(user::setId);
-        return user;
+        long userId = keyList.map(item -> item.iterator().next().get("user_id")).map(id -> Long.valueOf((Integer) id)).orElse(0L);
+
+        user.getTickets().forEach(ticket -> ticket.setUserId(userId));
+        user.getTickets().stream()
+                .filter(ticket -> ticket.getId() > 0)
+                .forEach(ticketDAO::update);
+        user.getTickets().stream()
+                .filter(ticket -> ticket.getId() == 0)
+                .forEach(ticketDAO::add);
+
+        return userId == 0 ? null : getById(userId);
     }
 
     @Override
     public void update(User user) {
         String sql = "UPDATE ticket_seller.public.user_table SET (user_first_name, user_last_name, user_email) = (?,?,?) WHERE user_id = ?";
         jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getId());
-        ticketDAO.deleteAllByUserId(user.getId());
-        user.getTickets().forEach(ticketDAO::add);
+
+        user.getTickets().forEach(ticket -> ticket.setUserId(user.getId()));
+        user.getTickets().stream()
+                .filter(ticket -> ticket.getId() > 0)
+                .forEach(ticketDAO::update);
+        user.getTickets().stream()
+                .filter(ticket -> ticket.getId() == 0)
+                .forEach(ticketDAO::add);
     }
 
     @Override
     public void delete(User user) {
         String sql = "DELETE FROM ticket_seller.public.user_table WHERE user_id = ?";
         jdbcTemplate.update(sql, user.getId());
-        ticketDAO.deleteAllByUserId(user.getId());
+
+        user.getTickets().stream()
+                .peek(ticket -> ticket.setUserId(0))
+                .forEach(ticketDAO::update);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class UserRowMapperImpl implements UserRowMapper {
         user.setFirstName(resultSet.getString("user_first_name"));
         user.setLastName(resultSet.getString("user_last_name"));
         List<Ticket> tickets = new ArrayList<>();
-        tickets.addAll(ticketDAO.getByUserId(resultSet.getInt("user_id")));
+        tickets.addAll(ticketDAO.getAllByUserId(resultSet.getInt("user_id")));
         user.setTickets(tickets);
         return user;
     }

@@ -30,13 +30,13 @@ public class TicketDAOJdbcImpl implements TicketDAO {
             PreparedStatement preparedStatement = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, (int) ticket.getUserId());
             preparedStatement.setInt(2, (int) ticket.getEventId());
-            preparedStatement.setInt(2, (int) ticket.getSeat().getId());
+            preparedStatement.setInt(3, (int) ticket.getSeat().getId());
             return preparedStatement;
         }, keyHolder);
 
         Optional<List<Map<String, Object>>> keyList = Optional.ofNullable(keyHolder.getKeyList());
-        keyList.map(item -> item.iterator().next().get("ticket_id")).map(id -> (long) id).ifPresent(ticket::setId);
-        return ticket;
+        long ticketId = keyList.map(item -> item.iterator().next().get("ticket_id")).map(id -> Long.valueOf((Integer)id)).orElse(0L);
+        return getById(ticketId);
     }
 
     @Override

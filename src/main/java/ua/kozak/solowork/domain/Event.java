@@ -8,12 +8,12 @@ import java.util.Set;
 
 public class Event implements Serializable {
 
-    private long id;
+    private long id = 0;
     private String name;
     private String description;
     private float basePrice;
     private List<Ticket> tickets = new ArrayList<>();
-    private long auditoryId;
+    private long auditoryId = 0;
     private Date startDate;
     private Date endDate;
 
@@ -120,9 +120,14 @@ public class Event implements Serializable {
 
         Event event = (Event) o;
 
-        return id == event.id ||
-                (auditoryId == event.auditoryId &&
-                        (startDate != null ? startDate.equals(event.startDate) : event.startDate == null));
+        if (id != event.id) return false;
+        if (Float.compare(event.basePrice, basePrice) != 0) return false;
+        if (auditoryId != event.auditoryId) return false;
+        if (name != null ? !name.equals(event.name) : event.name != null) return false;
+        if (description != null ? !description.equals(event.description) : event.description != null) return false;
+        if (tickets != null ? !tickets.equals(event.tickets) : event.tickets != null) return false;
+        if (startDate != null ? !startDate.equals(event.startDate) : event.startDate != null) return false;
+        return endDate != null ? endDate.equals(event.endDate) : event.endDate == null;
     }
 
     @Override

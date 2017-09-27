@@ -49,7 +49,7 @@ public class EventDAOJdbcImpl implements EventDAO {
         event.getTickets().forEach(ticketDAO::add);//todo not add events but modify
 
         Optional<List<Map<String, Object>>> keyList = Optional.ofNullable(keyHolder.getKeyList());
-        keyList.map(item -> item.iterator().next().get("event_id")).map(id -> (long) id).ifPresent(event::setId);
+        keyList.map(item -> item.iterator().next().get("event_id")).map(id -> new Long((Integer)id)).ifPresent(event::setId);
         return event;
     }
 

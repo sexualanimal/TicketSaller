@@ -19,9 +19,9 @@ public class TicketRowMapperImpl implements TicketRowMapper {
     public Ticket mapRow(ResultSet resultSet, int i) throws SQLException {
         final Ticket ticket = new Ticket();
         ticket.setId(resultSet.getInt("ticket_id"));
-        ticket.setEventId(resultSet.getInt("event_id"));
-        ticket.setUserId(resultSet.getInt("user_id"));
-        ticket.setSeat(seatDAO.getById(resultSet.getInt("seat_id")));
+        ticket.setEventId(resultSet.getInt("ticket_event_id"));
+        ticket.setUserId(resultSet.getInt("ticket_user_id"));
+        ticket.setSeat(seatDAO.getById(resultSet.getInt("ticket_seat_id")));
         return ticket;
     }
 }

@@ -64,10 +64,10 @@ public class Ticket {
 
         Ticket ticket = (Ticket) o;
 
-        return id == ticket.id ||
-                (eventId == ticket.eventId &&
-                        userId == ticket.userId &&
-                        (seat != null ? seat.equals(ticket.seat) : ticket.seat == null));
+        if (id != ticket.id) return false;
+        if (eventId != ticket.eventId) return false;
+        if (userId != ticket.userId) return false;
+        return seat != null ? seat.equals(ticket.seat) : ticket.seat == null;
     }
 
     @Override
